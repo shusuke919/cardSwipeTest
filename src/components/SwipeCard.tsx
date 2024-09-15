@@ -19,21 +19,23 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ color, onSwipeEnd, zIndex }) => {
   const [opacity, setOpacity] = useState(1);
   const cardRef = useRef<CardElement | null>(null);
 
-  const handleTouchStart = (e: any) => {
+  const handleTouchStart = (e: React.TouchEvent | React.MouseEvent) => {
     if (!cardRef.current) return;
     setIsSwiping(true);
-    cardRef.current.startX = e.touches ? e.touches[0].clientX : e.clientX;
-    cardRef.current.startY = e.touches ? e.touches[0].clientY : e.clientY;
+    const startX = 'touches' in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
+    const startY = 'touches' in e ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
+    cardRef.current.startX = startX;
+    cardRef.current.startY = startY;
   };
 
-  const handleTouchMove = (e: any) => {
+  const handleTouchMove = (e: React.TouchEvent | React.MouseEvent) => {
     if (!isSwiping || !cardRef.current) return;
-    const moveX = e.touches
+    const moveX = 'touches' in e
       ? e.touches[0].clientX - cardRef.current.startX
-      : e.clientX - cardRef.current.startX;
-    const moveY = e.touches
+      : (e as React.MouseEvent).clientX - cardRef.current.startX;
+    const moveY = 'touches' in e
       ? e.touches[0].clientY - cardRef.current.startY
-      : e.clientY - cardRef.current.startY;
+      : (e as React.MouseEvent).clientY - cardRef.current.startY;
 
     // 横の移動に基づいて透明度を変更
     const moveOpacity = 1 - Math.abs(moveX) / window.innerWidth;
