@@ -38,9 +38,8 @@ export default function Home() {
           />
         </>
       ) : (
-        <div>もうカードはありません</div>
+        <div>カードはありません</div>
       )}
-      こんばんわ
     </div>
   );
 }
